@@ -28,4 +28,27 @@ insertionSort' (a:as) = insert a $ insertionSort' as where
         | x > y         = x:all -- Only change is flipping the relationlal operator
         | otherwise     = y:(insert x ys)
 
+selectionSort :: Ord a => [a] -> [a]
+selectionSort ls = go ls [] where
+    removeN n (a:as) 
+        | n == a = as
+        | otherwise = a: (removeN n as)
+    go [] acc = reverse acc
+    go ls acc = go (removeN (minimum ls) ls) ((minimum ls):acc) 
 
+mergeSort :: Ord a => [a] -> [a]
+mergeSort ls = mSort ls where
+    merge [] bs = bs
+    merge as [] = as
+    merge at@(a:as) bt@(b:bs)
+        | a < b     = a:(merge as bt)
+        | b < a     = b:(merge at bs)
+        | otherwise = a:(merge as bt)
+    mSort (a:[]) = [a]
+    mSort xs = let
+        n = (\x -> x `div` 2) . length $ xs 
+        p = mSort . take n $ xs
+        q = mSort . drop n $ xs
+        in merge p q
+        
+ 
